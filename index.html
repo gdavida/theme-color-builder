@@ -47,10 +47,13 @@
         .controls {
             text-align: center;
             margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
         }
         
         .toggle-switch {
-            margin: 0 10px;
             padding: 6px 12px;
             border: 1px solid #ccc;
             background: white;
@@ -61,6 +64,52 @@
         
         .toggle-switch:hover {
             background: #f5f5f5;
+        }
+        
+        .toggle-switch.active {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+        
+        .compliance-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .compliance-toggle label {
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .compliance-toggle input[type="radio"] {
+            cursor: pointer;
+        }
+        
+        .compliance-info {
+            background: #e3f2fd;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 4px solid #1976d2;
+        }
+        
+        .compliance-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1565c0;
+            margin-bottom: 8px;
+        }
+        
+        .compliance-description {
+            color: #424242;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
         
         .palette {
@@ -82,9 +131,25 @@
             writing-mode: horizontal-tb;
             text-align: center;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             justify-content: center;
             border-right: 1px solid #eee;
+        }
+        
+        .palette-status {
+            font-size: 12px;
+            color: black;
+            font-weight: 300;
+            margin-top: 5px;
+        }
+        
+        .palette-status.status-pass .status-icon {
+            color: #28a745;
+        }
+        
+        .palette-status.status-fail .status-icon {
+            color: #dc3545;
         }
         
         .palette-content {
@@ -115,10 +180,17 @@
         .color-grid {
             display: flex;
             gap: 8px;
+            align-items: flex-start;
+        }
+        
+        .color-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .color-swatch {
-            width: 150px;
+            width: 120px;
             height: 65px;
             display: flex;
             flex-direction: column;
@@ -139,43 +211,168 @@
         
         .swatch-hex {
             font-family: 'Courier New', monospace;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             opacity: 0.9;
+            text-align: center;
+            margin-top: 2px;
         }
         
         .color-swatch.white-text {
             color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
         }
         
         .color-swatch.black-text {
             color: black;
-            text-shadow: 1px 1px 1px rgba(255,255,255,0.7);
         }
         
-        .auto-indicator {
+        .export-button {
             position: absolute;
-            top: 2px;
-            right: 2px;
-            background: rgba(227, 242, 253, 0.9);
-            color: #1565c0;
-            font-size: 0.6rem;
-            padding: 1px 3px;
-            border-radius: 2px;
+            top: 15px;
+            right: 15px;
+            padding: 4px 10px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .export-button:hover {
+            background: #357abd;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
             font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .close-button {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-button:hover {
+            color: #333;
+        }
+        
+        .css-output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .copy-css-button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .copy-css-button:hover {
+            background: #218838;
+        }
+        
+        .accent-on-white {
+            width: 120px;
+            height: 65px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .accent-on-white.pass {
+            border-color: #28a745;
+        }
+        
+        .accent-on-white.fail {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .accent-on-white-label {
+            font-size: 0.65rem;
+            color: #666;
+            margin-bottom: 3px;
         }
         
         .issue-indicator {
             position: absolute;
-            bottom: 2px;
-            left: 2px;
-            right: 2px;
-            background: rgba(248, 215, 218, 0.95);
-            color: #721c24;
-            font-size: 0.6rem;
-            padding: 2px 4px;
-            border-radius: 2px;
-            font-weight: bold;
+            top: 4px;
+            right: 4px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
         }
         
         .contrast-ratio {
@@ -216,6 +413,15 @@
             gap: 8px;
         }
         
+        .current-standard {
+            background: #e3f2fd;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #1565c0;
+        }
+        
         @media (max-width: 768px) {
             .palette-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -235,11 +441,33 @@
         <div class="header">
             <h1>Color Accessibility Tracker</h1>
             <p>Quick overview of palette accessibility - issues shown only when they exist</p>
+            <p style="font-size: 0.8rem; color: #999; margin-top: 5px;">Showing <span id="paletteCount">0</span> palettes</p>
         </div>
         
         <div class="controls">
+            <div class="compliance-toggle">
+                <label>
+                    <input type="radio" name="compliance" value="AA" checked onchange="updateComplianceLevel('AA')">
+                    WCAG AA
+                </label>
+                <label>
+                    <input type="radio" name="compliance" value="AAA" onchange="updateComplianceLevel('AAA')">
+                    WCAG AAA
+                </label>
+            </div>
             <button onclick="toggleDemo()" id="demoToggle" class="toggle-switch">Show Demo</button>
             <button onclick="toggleContrast()" id="contrastToggle" class="toggle-switch">Show Contrast Ratios</button>
+            <button onclick="toggleEditor()" id="editorToggle" class="toggle-switch">Show Color Editor</button>
+        </div>
+        
+        <div id="editorSection" style="display: none; background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin-bottom: 10px; color: #2c3e50;">Color Palette Editor</h3>
+            <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Edit the JSON below to modify palettes. Each palette needs a name and 5 colors: [main1, main2, main3, accent1, accent2]</p>
+            <textarea id="paletteJson" style="width: 100%; height: 400px; font-family: 'Courier New', monospace; font-size: 13px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+            <div style="margin-top: 10px;">
+                <button onclick="savePalettes()" style="padding: 8px 16px; background: #2ecc71; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 10px;">Save & Regenerate</button>
+                <button onclick="resetToDefault()" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer;">Reset to Default</button>
+            </div>
         </div>
         
         <div class="legend">
@@ -251,8 +479,11 @@
                 <div class="legend-item">
                     <span><strong>Red alerts:</strong> Specific issues that need fixing</span>
                 </div>
-                <div class="legend-item">
-                    <span><strong>AUTO:</strong> Best text color automatically selected for accents</span>
+            </div>
+            <div class="compliance-info">
+                <div class="compliance-title" id="complianceTitle">Testing: WCAG AA Standard</div>
+                <div class="compliance-description" id="complianceDescription">
+                    AA is the recommended standard for most websites, requiring 4.5:1 contrast for normal text and 3:1 for large text. This ensures good readability for most users including those with mild vision impairments.
                 </div>
             </div>
             
@@ -267,11 +498,12 @@
                         </div>
                     </div>
                     <div>
-                        <h4 style="margin-bottom: 8px; color: #2c3e50; font-size: 0.95rem;">WCAG AA Standards:</h4>
+                        <h4 style="margin-bottom: 8px; color: #2c3e50; font-size: 0.95rem;">WCAG Standards:</h4>
                         <div style="font-size: 0.8rem; line-height: 1.4;">
-                            <div><strong>Normal text:</strong> 4.5:1 contrast minimum</div>
-                            <div><strong>Large text:</strong> 3:1 contrast minimum</div>
-                            <div><strong>Icons:</strong> Same as normal text (4.5:1)</div>
+                            <div><strong>AA Normal text:</strong> 4.5:1 contrast minimum</div>
+                            <div><strong>AA Large text:</strong> 3:1 contrast minimum</div>
+                            <div><strong>AAA Normal text:</strong> 7:1 contrast minimum</div>
+                            <div><strong>AAA Large text:</strong> 4.5:1 contrast minimum</div>
                         </div>
                     </div>
                 </div>
@@ -284,65 +516,25 @@
             </div>
         </div>
         
-        <div class="palette contrast-hidden">
-            <div class="palette-title">Emerald Blend</div>
-            <div class="palette-content">
-                <div class="colors-container">
-                    <div class="color-group">
-                        <div class="group-title">Main Colors</div>
-                        <div class="color-grid">
-                        <div class="color-item">
-                            <div class="color-swatch white-text" style="background-color: #08494b;">
-                                White Text
-                                <div class="contrast-ratio">8.4:1</div>
-                            </div>
-                            <div class="swatch-hex">#08494b</div>
-                        </div>
-                        
-                        <div class="color-item">
-                            <div class="color-swatch white-text" style="background-color: #006956;">
-                                White Text
-                                <div class="contrast-ratio">6.8:1</div>
-                            </div>
-                            <div class="swatch-hex">#006956</div>
-                        </div>
-                        
-                        <div class="color-item">
-                            <div class="color-swatch black-text" style="background-color: #7ab2a7;">
-                                Black Text
-                                <div class="contrast-ratio">5.1:1</div>
-                            </div>
-                            <div class="swatch-hex">#7ab2a7</div>
-                        </div>
-                        </div>
-                    </div>
-                    
-                    <div class="color-group">
-                        <div class="group-title">Accent Colors</div>
-                        <div class="color-grid">
-                        <div class="color-item">
-                            <div class="color-swatch white-text" style="background-color: #4b5dff;">
-                                White Text
-                                <div class="contrast-ratio">5.1:1</div>
-                            </div>
-                            <div class="swatch-hex">#4b5dff</div>
-                        </div>
-                        
-                        <div class="color-item">
-                            <div class="color-swatch white-text" style="background-color: #2f1f70;">
-                                White Text
-                                <div class="contrast-ratio">10.2:1</div>
-                            </div>
-                            <div class="swatch-hex">#2f1f70</div>
-                        </div>
-                        </div>
-                    </div>
+        <div id="palettesContainer"></div>
+        
+        <!-- Export Modal -->
+        <div id="exportModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Export CSS Variables</h3>
+                    <button class="close-button" onclick="closeModal()">&times;</button>
                 </div>
+                <div class="css-output" id="cssOutput"></div>
+                <button class="copy-css-button" id="copyCssButton" onclick="copyCss()">Copy CSS</button>
             </div>
         </div>
     </div>
     
     <script>
+        // Global variable for compliance level
+        let currentComplianceLevel = 'AA';
+        
         // Contrast calculation functions
         function getContrastRatio(color1, color2) {
             const l1 = getLuminance(color1);
@@ -370,8 +562,12 @@
             ] : null;
         }
         
-        function passesWCAG_AA(ratio, isLargeText = false) {
-            return isLargeText ? ratio >= 3.0 : ratio >= 4.5;
+        function passesWCAG(ratio, isLargeText = false, level = 'AA') {
+            if (level === 'AA') {
+                return isLargeText ? ratio >= 3.0 : ratio >= 4.5;
+            } else { // AAA
+                return isLargeText ? ratio >= 4.5 : ratio >= 7.0;
+            }
         }
         
         function getBestTextColor(backgroundColor) {
@@ -380,32 +576,58 @@
             return whiteRatio > blackRatio ? '#ffffff' : '#000000';
         }
         
+        function updateComplianceLevel(level) {
+            currentComplianceLevel = level;
+            const title = document.getElementById('complianceTitle');
+            const description = document.getElementById('complianceDescription');
+            
+            if (level === 'AA') {
+                title.textContent = 'Testing: WCAG AA Standard';
+                description.textContent = 'AA is the recommended standard for most websites, requiring 4.5:1 contrast for normal text and 3:1 for large text. This ensures good readability for most users including those with mild vision impairments.';
+            } else {
+                title.textContent = 'Testing: WCAG AAA Standard';
+                description.textContent = 'AAA is the highest accessibility standard, requiring 7:1 contrast for normal text and 4.5:1 for large text. This enhanced level provides maximum readability but can be challenging to achieve with certain color combinations, especially for brand colors.';
+            }
+            regeneratePalettes();
+        }
+        
         function addPalette(paletteName, colors) {
-            const container = document.querySelector('.container');
+            const container = document.getElementById('palettesContainer');
             
             let mainColorsHTML = '';
             let accentColorsHTML = '';
             let hasIssues = false;
+            let textColors = []; // Store text colors for export
             
             colors.forEach((color, index) => {
-                let textColor, textLabel, isAuto = false;
+                let textColor, textLabel;
                 
-                if (index === 0 || index === 1) {
-                    textColor = '#ffffff';
-                    textLabel = 'White Text';
-                } else if (index === 2) {
-                    textColor = '#000000';
-                    textLabel = 'Black Text';
+                // For Accent 1 (index 3), prefer white text if it passes
+                if (index === 3) {
+                    const whiteRatio = getContrastRatio(color, '#ffffff');
+                    const blackRatio = getContrastRatio(color, '#000000');
+                    
+                    // If white passes current compliance level, use white
+                    if (passesWCAG(whiteRatio, false, currentComplianceLevel)) {
+                        textColor = '#ffffff';
+                        textLabel = 'White Text';
+                    } else {
+                        // Otherwise use black
+                        textColor = '#000000';
+                        textLabel = 'Black Text';
+                    }
                 } else {
+                    // For all other colors, auto-decide based on best contrast
                     textColor = getBestTextColor(color);
                     textLabel = textColor === '#ffffff' ? 'White Text' : 'Black Text';
-                    isAuto = true;
                 }
                 
+                textColors.push(textColor); // Store for export
+                
                 const ratio = getContrastRatio(color, textColor);
-                const normalPass = passesWCAG_AA(ratio);
-                const largePass = passesWCAG_AA(ratio, true);
-                const iconPass = passesWCAG_AA(ratio);
+                const normalPass = passesWCAG(ratio, false, currentComplianceLevel);
+                const largePass = passesWCAG(ratio, true, currentComplianceLevel);
+                const iconPass = passesWCAG(ratio, false, currentComplianceLevel);
                 
                 const previewClass = textColor === '#ffffff' ? 'white-text' : 'black-text';
                 
@@ -443,10 +665,18 @@
             
             const statusClass = hasIssues ? 'status-fail' : 'status-pass';
             const statusIcon = hasIssues ? '✗' : '✓';
-            const statusText = hasIssues ? 'Has issues' : 'All tests pass';
+            const statusText = hasIssues ? `Has ${currentComplianceLevel} issues` : `All ${currentComplianceLevel} tests pass`;
+            
+            // Store palette data for export
+            const paletteData = JSON.stringify({
+                name: paletteName,
+                colors: colors,
+                textColors: textColors
+            });
             
             const paletteHTML = `
-                <div class="palette contrast-hidden">
+                <div class="palette contrast-hidden" style="position: relative;">
+                    <button class="export-button" onclick='exportPalette(${paletteData})'>Export CSS</button>
                     <div class="palette-title">
                         <div class="palette-name">${paletteName}</div>
                         <div class="palette-status ${statusClass}">
@@ -492,7 +722,7 @@
         function toggleContrast() {
             const palettes = document.querySelectorAll('.palette');
             const toggleButton = document.getElementById('contrastToggle');
-            const isCurrentlyHidden = palettes[0].classList.contains('contrast-hidden');
+            const isCurrentlyHidden = palettes.length > 0 && palettes[0].classList.contains('contrast-hidden');
             
             palettes.forEach(palette => {
                 if (isCurrentlyHidden) {
@@ -505,38 +735,229 @@
             toggleButton.textContent = isCurrentlyHidden ? 'Hide Contrast Ratios' : 'Show Contrast Ratios';
         }
         
-        // Add all palettes with individual error handling
-        const palettesToAdd = [
-            ['Desert Sunrise', ['#3e2723', '#8d6e63', '#d7ccc8', '#ffd54f', '#bf9000']],
-            ['Mountain Trail', ['#406446', '#5a8550', '#79a64c', '#4c79a6', '#003973']],
-            ['Garden Party', ['#4a1b2f', '#a14a61', '#e9a6a7', '#b555ff', '#5b3c77']],
-            ['Meadow Bloom', ['#24331c', '#6b7c2b', '#c3d989', '#3ab4ff', '#2d4a75']],
-            ['Industrial Honey', ['#131613', '#4a4e4d', '#b5b8b7', '#ff9c00', '#b54b00']],
-            ['Deep Space', ['#0c0f12', '#1d274f', '#3b9eff', '#00b894', '#00f0d1']],
-            ['Quiet Morning', ['#6b5f57', '#a89d91', '#e2dbd3', '#a3b1b8', '#b6b5a0']],
-            ['Neon Dreams', ['#3f3f3f', '#6a6a6a', '#b1b1b1', '#ff2ecd', '#c833ff']],
-            ['Greenhouse Glow', ['#2d4a3a', '#4a6b5a', '#a8c4a2', '#ff6b6b', '#c44536']],
-            ['Campfire Stories', ['#1e3a2e', '#3d5a4f', '#b8d4c2', '#ffb347', '#d2691e']],
-            ['Vintage Elegance', ['#2c3e50', '#5d7a8a', '#c5d3d9', '#e8b4b8', '#a0556b']],
-            ['Harbor Lights', ['#1a2332', '#3d4f5c', '#b8c5d1', '#ff8c42', '#cc5500']],
-            ['Cyber Punk', ['#0f1419', '#2a3441', '#e8eaed', '#39ff14', '#00d4ff']],
-            ['City Nights', ['#1c1c1e', '#48484a', '#f2f2f7', '#ff2d92', '#8e44ad']],
-            ['Rocket Fuel', ['#0d1117', '#21262d', '#f0f6fc', '#ff6b35', '#1abc9c']],
-            ['Electric Sunshine', ['#161618', '#2d2d30', '#f5f5f7', '#ffeb3b', '#2196f3']],
-            ['Cloud Nine', ['#8a8a8a', '#b8b8b8', '#f0f0f0', '#d4d4d4', '#9e9e9e']],
-            ['Spring Whisper', ['#c8d5c8', '#e1ebe1', '#f5f8f5', '#f0e6e6', '#e8e1f0']],
-            ['Vanilla Bean', ['#707070', '#d4d0cc', '#f9f7f4', '#f5f2ee', '#e8e4e0']],
-            ['Morning Mist', ['#c5d1d8', '#e8f0f5', '#f8fafb', '#faf9f7', '#e9e7e4']]
+        // Default palette data
+        const defaultPalettes = [
+            ["Emerald Blend", ["#08494b", "#006956", "#7ab2a7", "#4b5dff", "#2f1f70"]],
+            ["Desert Sunrise", ["#3e2723", "#8d6e63", "#d7ccc8", "#ffd54f", "#bf9000"]],
+            ["Mountain Trail", ["#406446", "#5a8550", "#79a64c", "#4c79a6", "#003973"]],
+            ["Garden Party", ["#4a1b2f", "#a14a61", "#e9a6a7", "#b555ff", "#5b3c77"]],
+            ["Meadow Bloom", ["#24331c", "#6b7c2b", "#c3d989", "#3ab4ff", "#2d4a75"]],
+            ["Industrial Honey", ["#131613", "#4a4e4d", "#b5b8b7", "#ff9c00", "#b54b00"]],
+            ["Deep Space", ["#0c0f12", "#1d274f", "#3b9eff", "#00b894", "#00f0d1"]],
+            ["Quiet Morning", ["#6b5f57", "#a89d91", "#e2dbd3", "#a3b1b8", "#b6b5a0"]],
+            ["Neon Dreams", ["#3f3f3f", "#6a6a6a", "#b1b1b1", "#ff2ecd", "#c833ff"]],
+            ["Greenhouse Glow", ["#2d4a3a", "#4a6b5a", "#a8c4a2", "#ff6b6b", "#c44536"]],
+            ["Campfire Stories", ["#1e3a2e", "#3d5a4f", "#b8d4c2", "#ffb347", "#d2691e"]],
+            ["Vintage Elegance", ["#2c3e50", "#5d7a8a", "#c5d3d9", "#e8b4b8", "#a0556b"]],
+            ["Harbor Lights", ["#1a2332", "#3d4f5c", "#b8c5d1", "#ff8c42", "#cc5500"]],
+            ["Cyber Punk", ["#0f1419", "#2a3441", "#e8eaed", "#39ff14", "#00d4ff"]],
+            ["City Nights", ["#1c1c1e", "#48484a", "#f2f2f7", "#ff2d92", "#8e44ad"]],
+            ["Ocean Trust", ["#0a2540", "#1e3a5f", "#7b9cb8", "#4a90e2", "#00a86b"]],
+            ["Medical Blue", ["#1a237e", "#3949ab", "#9fa8da", "#42a5f5", "#00897b"]],
+            ["Corporate Navy", ["#0d1b2a", "#2c3e50", "#95a5a6", "#3498db", "#8e44ad"]],
+            ["Financial Depth", ["#1c2833", "#34495e", "#85929e", "#5499c7", "#16a085"]],
+            ["Artisan Warmth", ["#4a2c2a", "#8b5a3c", "#d4a574", "#ff6b6b", "#4a90e2"]],
+            ["Bakery Morning", ["#5d4037", "#8d6e63", "#d7ccc8", "#ff8c42", "#7b68ee"]],
+            ["Terracotta Craft", ["#5d2f1e", "#a0522d", "#daa520", "#ff7043", "#26a69a"]],
+            ["Coffee House", ["#3e2723", "#6d4c41", "#d7ccc8", "#ff9800", "#5c6bc0"]],
+            ["Sage Garden", ["#2d4a2b", "#4a6741", "#a8c09a", "#81c784", "#ff6b6b"]],
+            ["Farm Fresh", ["#33691e", "#689f38", "#c5e1a5", "#ffb347", "#4a90e2"]],
+            ["Wellness Green", ["#1b4332", "#2d6a4f", "#95d5b2", "#52b788", "#9c27b0"]],
+            ["Earth Living", ["#3e4723", "#606c38", "#a3b18a", "#90a955", "#ff5722"]],
+            ["Coral Energy", ["#37474f", "#607d8b", "#cfd8dc", "#ff5252", "#00bcd4"]],
+            ["Teal Motion", ["#004d40", "#00695c", "#80cbc4", "#00acc1", "#ff4081"]],
+            ["Creative Burst", ["#311b92", "#512da8", "#b39ddb", "#ff4081", "#00e676"]],
+            ["Tech Forward", ["#263238", "#455a64", "#b0bec5", "#00bcd4", "#ff5722"]],
+            ["Twilight Mist", ["#416165", "#0b3948", "#d9dbf1", "#d0cdd7", "#acb0bd"]],
+            ["Sunset Coast", ["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"]],
+            ["Royal Flame", ["#2e005d", "#5c008b", "#8e008b", "#ff8300", "#ff6200"]],
+            ["Peach Blossom", ["#ffa970", "#ffc370", "#fdc3dc", "#fcb0c6", "#fd7272"]],
+            ["Mystic Plum", ["#2c1320", "#5f4b66", "#a7adc6", "#8797af", "#56667a"]],
+            ["Lavender Mint", ["#985f99", "#9684a1", "#aaacb0", "#b6c9bb", "#bfedc1"]]
         ];
         
-        palettesToAdd.forEach(([name, colors], index) => {
-            try {
-                addPalette(name, colors);
-                console.log(`Successfully added palette ${index + 1}: ${name}`);
-            } catch (error) {
-                console.error(`Error adding palette ${name}:`, error);
+        // Load palettes from localStorage or use defaults
+        let storedPalettes = JSON.parse(localStorage.getItem('colorPalettes'));
+        
+        // If stored palettes exist but don't have all 31, reset to defaults
+        if (storedPalettes && storedPalettes.length !== 31) {
+            localStorage.removeItem('colorPalettes');
+            storedPalettes = null;
+        }
+        
+        let currentPalettes = storedPalettes || defaultPalettes;
+        
+        // Initialize the editor with current palettes
+        function initializeEditor() {
+            const textarea = document.getElementById('paletteJson');
+            // Format each palette on its own line with proper spacing
+            const formattedPalettes = currentPalettes.map(([name, colors]) => {
+                const colorString = colors.map(c => `"${c}"`).join(', ');
+                return `  ["${name}", [${colorString}]]`;
+            }).join(',\n');
+            
+            textarea.value = `[\n${formattedPalettes}\n]`;
+        }
+        
+        // Toggle editor visibility
+        function toggleEditor() {
+            const editorSection = document.getElementById('editorSection');
+            const toggleButton = document.getElementById('editorToggle');
+            
+            if (editorSection.style.display === 'none') {
+                editorSection.style.display = 'block';
+                toggleButton.textContent = 'Hide Color Editor';
+                initializeEditor();
+            } else {
+                editorSection.style.display = 'none';
+                toggleButton.textContent = 'Show Color Editor';
             }
-        });
+        }
+        
+        // Save palettes and regenerate
+        function savePalettes() {
+            const textarea = document.getElementById('paletteJson');
+            try {
+                const newPalettes = JSON.parse(textarea.value);
+                
+                // Validate palette structure
+                if (!Array.isArray(newPalettes)) {
+                    throw new Error('Palettes must be an array');
+                }
+                
+                newPalettes.forEach((palette, index) => {
+                    if (!Array.isArray(palette) || palette.length !== 2) {
+                        throw new Error(`Palette ${index + 1} must be [name, colors]`);
+                    }
+                    if (typeof palette[0] !== 'string') {
+                        throw new Error(`Palette ${index + 1} must have a string name`);
+                    }
+                    if (!Array.isArray(palette[1]) || palette[1].length !== 5) {
+                        throw new Error(`Palette "${palette[0]}" must have exactly 5 colors`);
+                    }
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('colorPalettes', JSON.stringify(newPalettes));
+                currentPalettes = newPalettes;
+                
+                // Regenerate all palettes
+                regeneratePalettes();
+                
+                alert('Palettes saved and regenerated successfully!');
+            } catch (error) {
+                alert('Error parsing JSON: ' + error.message);
+            }
+        }
+        
+        // Reset to default palettes
+        function resetToDefault() {
+            if (confirm('Are you sure you want to reset to default palettes? This will overwrite any custom changes.')) {
+                localStorage.removeItem('colorPalettes');
+                currentPalettes = defaultPalettes;
+                initializeEditor();
+                regeneratePalettes();
+            }
+        }
+        
+        // Clear existing palettes and regenerate
+        function regeneratePalettes() {
+            const container = document.getElementById('palettesContainer');
+            container.innerHTML = '';
+            
+            // Add all palettes from currentPalettes
+            currentPalettes.forEach(([name, colors]) => {
+                try {
+                    addPalette(name, colors);
+                } catch (error) {
+                    console.error(`Error adding palette ${name}:`, error);
+                }
+            });
+            
+            // Update palette count
+            const count = document.getElementById('paletteCount');
+            if (count) {
+                count.textContent = currentPalettes.length;
+            }
+            
+            // Update contrast toggle state if needed
+            const toggleButton = document.getElementById('contrastToggle');
+            if (toggleButton.textContent === 'Show Contrast Ratios') {
+                const palettes = document.querySelectorAll('.palette');
+                palettes.forEach(palette => palette.classList.add('contrast-hidden'));
+            }
+        }
+        
+        // Export functions
+        let currentCssOutput = '';
+        
+        function exportPalette(paletteData) {
+            const { name, colors, textColors } = paletteData;
+            
+            // Convert palette name to camelCase class name
+            const className = name
+                .replace(/\s+/g, '') // Remove spaces
+                .replace(/^(.)/, (match) => match.toLowerCase()); // Lowercase first letter
+            
+            // Generate CSS variables
+            let css = `/* ${name} Color Palette */\n`;
+            css += `.business-single.theme-${className} {\n`;
+            css += `  /* Color values */\n`;
+            css += `  --mainDark: ${colors[0]};\n`;
+            css += `  --mainMedium: ${colors[1]};\n`;
+            css += `  --mainLight: ${colors[2]};\n`;
+            css += `  --accent1: ${colors[3]};\n`;
+            css += `  --accent2: ${colors[4]};\n`;
+            css += `  \n`;
+            css += `  /* Text colors for each background */\n`;
+            css += `  --mainDarkText: ${textColors[0]};\n`;
+            css += `  --mainMediumText: ${textColors[1]};\n`;
+            css += `  --mainLightText: ${textColors[2]};\n`;
+            css += `  --accent1Text: ${textColors[3]};\n`;
+            css += `  --accent2Text: ${textColors[4]};\n`;
+            css += `}`;
+            
+            currentCssOutput = css;
+            
+            // Show modal
+            document.getElementById('cssOutput').textContent = css;
+            document.getElementById('exportModal').style.display = 'block';
+            
+            // Reset copy button
+            const copyButton = document.getElementById('copyCssButton');
+            copyButton.textContent = 'Copy CSS';
+            copyButton.classList.remove('copied');
+        }
+        
+        function closeModal() {
+            document.getElementById('exportModal').style.display = 'none';
+        }
+        
+        function copyCss() {
+            navigator.clipboard.writeText(currentCssOutput).then(() => {
+                const copyButton = document.getElementById('copyCssButton');
+                copyButton.textContent = 'Copied!';
+                copyButton.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyButton.textContent = 'Copy CSS';
+                    copyButton.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy CSS. Please select and copy manually.');
+            });
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('exportModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Initialize palettes on page load
+        regeneratePalettes();
         
         console.log('Color Accessibility Tracker loaded successfully!');
     </script>
